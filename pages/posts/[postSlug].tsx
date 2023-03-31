@@ -1,17 +1,40 @@
 import axios from 'axios'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { postSlugValue } from '../../redux/postSlugReducer'
+import { RootState, store } from '../../redux/store'
 import { PostType } from '../../types/Post'
+import { revalidation } from '../../utils/revalidation'
 
 type PostDetailsPageProps = {
   post: PostType
+  postSlug: number
 }
 
-const PostDetailsPage: NextPage<PostDetailsPageProps> = ({post}) => {
+const PostDetailsPage: NextPage<PostDetailsPageProps> = ({
+  post,
+  postSlug,
+}) => {
+  // const dispatch = useDispatch()
+  // dispatch(postSlugValue(postSlug)))
+
+  useEffect(() => {
+    window.addEventListener('load', () => {
+      revalidation(postSlug)
+    })
+    return () => window.removeEventListener('load', () => {
+      revalidation( postSlug)
+    })
+  }, [])
+
   return (
-    <div className='text-3xl text-gray-700'>
-      <p>title: {post.title}</p>
-      <p>author: {post.author}</p>
+    <div className="text-3xl text-gray-700">
+      <>
+        <p>title: {post.title}</p>
+        <p>author: {post.author}</p>
+      </>
     </div>
   )
 }
@@ -20,19 +43,25 @@ export default PostDetailsPage
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const { data: posts } = await axios.get('http://localhost:3001/posts/')
-  const paths = posts.map((post: PostType) => ({params: {postSlug: String(post.id)}}))
+  const paths = posts.map((post: PostType) => ({
+    params: { postSlug: String(post.id) },
+  }))
 
   return {
     paths,
-    fallback: false
+    fallback: false,
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  const { data: post } = await axios.get(`http://localhost:3001/posts/${params?.postSlug}`)
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { data: post } = await axios.get(
+    `http://localhost:3001/posts/${params?.postSlug}`
+  )
+  
   return {
     props: {
       post,
+      postSlug: params?.postSlug,
     },
   }
 }
