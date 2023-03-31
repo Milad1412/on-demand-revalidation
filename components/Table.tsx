@@ -60,7 +60,7 @@ const Table: React.FC<TableProps> = ({
           price,
         }) => {
           return (
-            <div>
+            <div key={name}>
               <p>busPassUnique: {busPassUnique}</p>
               <p>busReceiptUnique: {busReceiptUnique}</p>
               <p>flightPassUnique: {flightPassUnique}</p>
