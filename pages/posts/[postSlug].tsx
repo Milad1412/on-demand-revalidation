@@ -25,7 +25,7 @@ const PostDetailsPage: NextPage<PostDetailsPageProps> = ({
       revalidation(postSlug)
     })
     return () => window.removeEventListener('load', () => {
-      revalidation( postSlug)
+      revalidation(postSlug)
     })
   }, [])
 
