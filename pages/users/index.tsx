@@ -2,23 +2,23 @@ import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
-import { PostType } from '../../types/Post'
+import { UserType } from '../../types/User'
 import { revalidation } from '../../utils/revalidation'
 
-type PostsPageProps = {
-  posts: PostType[]
+type UsersPageProps = {
+  users: UserType[]
 }
 
-const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
+const UsersPage: NextPage<UsersPageProps> = ({ users }) => {
   useEffect(() => {
-    revalidation('posts')
+    revalidation('users')
   }, [])
   return (
     <div className="flex flex-col">
-      {posts.map((post) => {
+      {users.map((user) => {
         return (
-          <Link key={post.id} href={`/posts/${post.id}`}>
-            {post.title}
+          <Link key={user.id} href={`/users/${user.id}`}>
+            {user.name}
           </Link>
         )
       })}
@@ -26,13 +26,13 @@ const PostsPage: NextPage<PostsPageProps> = ({ posts }) => {
   )
 }
 
-export default PostsPage
+export default UsersPage
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data: posts } = await axios.get('http://localhost:3001/posts/')
+  const { data: users } = await axios.get('http://localhost:3001/users/')
   return {
     props: {
-      posts,
+      users,
     },
   }
 }

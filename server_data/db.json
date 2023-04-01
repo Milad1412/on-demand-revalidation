@@ -2,13 +2,27 @@
   "posts": [
     {
       "id": 1,
-      "title": "post oneeeee",
+      "title": "post one",
       "author": "author one"
     },
     {
       "id": 2,
-      "title": "post twosdlkfaj",
+      "title": "post two",
       "author": "author two"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Miladdddd"
+    },
+    {
+      "id": 2,
+      "name": "Mahdi"
+    },
+    {
+      "id": 3,
+      "name": "Sina"
     }
   ]
 }
