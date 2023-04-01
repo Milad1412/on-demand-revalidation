@@ -2,14 +2,16 @@ import { NextApiRequest, NextApiResponse } from 'next'
 
 type PageTypes = 'users' | 'posts'
 
-const revalidateFetchers = (
+const revalidateFetchers = async (
   page: PageTypes,
-  slug: string | string[] | undefined
+  slug: string | string[] | undefined,
+  req: NextApiRequest,
+  res: NextApiResponse
 ) => {
   if (slug) {
-    fetch(`/api/revalidate/${page}/${slug}`)
+    await res.revalidate(`/users/${req.query.slug}`)
   } else {
-    fetch(`/api/revalidate/${page}`)
+    await res.revalidate(`/users`)
   }
 }
 
@@ -22,12 +24,10 @@ export default async function handler(
     // e.g. for "/blog/[slug]" this should be "/blog/post-1"
     switch (req.query.page) {
       case 'users': {
-        revalidateFetchers('users', req.query.slug)
-        return res.json({ revalidated: true })
+        revalidateFetchers('users', req.query.slug, req, res)
       }
       case 'posts': {
-        revalidateFetchers('posts', req.query.slug)
-        return res.json({ revalidated: true })
+        revalidateFetchers('users', req.query.slug, req, res)
       }
     }
   } catch (err) {
